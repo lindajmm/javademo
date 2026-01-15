@@ -39,7 +39,11 @@ public class PersonalAccountBook {
                 scanner.nextLine(); // 消耗换行符
 
                 switch (choice) {
-                    case 1 -> addRecord();
+                    case 1 -> {
+                        addRecord();
+                        // 添加完数据之后保存数据
+                        saveData();
+                    }
                     case 2 -> viewAllRecords();
                     case 3 -> viewMonthlyReport();
                     case 4 -> viewCategoryStatistics();
@@ -67,8 +71,8 @@ public class PersonalAccountBook {
             }
         }
 
-        // 保存数据并退出
-        saveData();
+        // 退出
+//        saveData();
         scanner.close();
         System.out.println("感谢使用个人记账本系统！");
     }
