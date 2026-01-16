@@ -14,15 +14,15 @@ import java.util.Properties;
 
 public class Main {
     public static void main(String[] args) {
-        PersonalAccountBook app = new PersonalAccountBook();
-        app.run();
+//        PersonalAccountBook app = new PersonalAccountBook();
+//        app.run();
 
 //        Map<String, String> tempProps = SystemProps.initProperties();
 //        Map<String, String> tempProps = SystemProps.initProperties();
 //        String lineSeparator = tempProps.getProperty("line.separator");
-      /*  Properties properties = System.getProperties();
+        Properties properties = System.getProperties();
         Map<String, String> getenv = System.getenv();
         String s = getenv.get("line.separator");
-        Object o = properties.get("line.separator");*/
+        Object o = properties.get("line.separator");
     }
 }

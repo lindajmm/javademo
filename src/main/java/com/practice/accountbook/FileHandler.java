@@ -12,6 +12,7 @@ import java.util.List;
  */
 public class FileHandler {
     private static final String DATA_FILE="src/main/resources/practice_account_data.txt";
+//    private static final String DATA_FILE="practice_account_data.txt";
     private static final String BACKUP_FILE="src/main/resources/practice_account_data_backup.txt";
 
     public boolean saveToFile(List<Record> records){

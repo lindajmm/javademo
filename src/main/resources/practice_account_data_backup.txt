@@ -1,0 +1,8 @@
+# 记账本数据文件
+# 格式： ID|日期|类型|金额|类别|备注
+1|2026-01-16|income|100.00|工资|salary
+3|2026-01-16|income|300.00|兼职|part-time job
+5|2025-10-09|income|4000.00|投资|investment
+2|2025-01-12|income|200.00|奖金|bonus
+4|2025-01-12|expense|12.00|餐饮|lunch
+6|2020-10-08|expense|2002.00|交通|high speed train

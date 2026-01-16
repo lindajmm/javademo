@@ -1,12 +1,16 @@
 package com.practice.accountbook;
 
 
+import com.linda.accountbook.AccountBook;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Comparator;
+import java.util.TreeMap;
 
 /**
  * @author: Linda
@@ -29,10 +33,22 @@ public class LindaMain {
     private static final String BACKUP_FILE="src/main/resources/practice_account_data_backup.txt";
 
     public static void main(String[] args) throws IOException {
-        File file = new File(DATA_FILE);
-       /* if(file.delete()){
+
+        TreeMap<com.linda.accountbook.AccountBook, Integer> treeMap = new TreeMap<>(new Comparator<AccountBook>() {
+            @Override
+            public int compare(AccountBook o1, AccountBook o2) {
+                return o1.getNextId() - o2.getNextId();
+            }
+        });
+        AccountBook accountBook1 = new AccountBook();
+        AccountBook accountBook2 = new AccountBook();
+        treeMap.put(accountBook1, 1);
+        treeMap.put(accountBook2, 2);
+
+       /* File file = new File(DATA_FILE);
+       *//* if(file.delete()){
             System.out.println("1.file has been deleted");
-        }*/
+        }*//*
             //文件不存在时会创建文件
             try(BufferedWriter writer = new BufferedWriter(new FileWriter(DATA_FILE))) {
                 System.out.println("will create a file if it doesn't exists.");
@@ -67,6 +83,6 @@ public class LindaMain {
         String content3 = Files.readString(Paths.get(DATA_FILE));
         System.out.println("查看文件内容： "+ content3);
         System.out.println("文件长度是： "+ file.length());
-
+*/
     }
 }

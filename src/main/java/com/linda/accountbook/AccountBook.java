@@ -93,6 +93,7 @@ public class AccountBook {
     public Map<YearMonth, Map<String, Double>> getMonthlySummary() {
         Map<YearMonth, Map<String, Double>> monthlySummary = new TreeMap<>(Collections.reverseOrder());
 
+
         for (Record record : records) {
             YearMonth yearMonth = YearMonth.from(record.getDate());
             monthlySummary.putIfAbsent(yearMonth, new HashMap<>());
