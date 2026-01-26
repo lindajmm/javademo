@@ -1,8 +1,10 @@
 package com.leetcode.practice.simple;
 
 
+import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Stack;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 /**
@@ -13,16 +15,16 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 public class SimpleAlgorithm {
 
     //input nums={0,1,0,3,12}, output = {1,3,12,0,0}
-    public static void moveZeroes(int[] nums){
-        if(nums == null || nums.length <=1){
+    public static void moveZeroes(int[] nums) {
+        if (nums == null || nums.length <= 1) {
             return;
         }
-        int nonZeroIndex=0;
-        for(int i=0; i< nums.length; i++){
-            if(nums[i] != 0){
-                if(i != nonZeroIndex){
+        int nonZeroIndex = 0;
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] != 0) {
+                if (i != nonZeroIndex) {
                     nums[nonZeroIndex] = nums[i];
-                    nums[i]=0;
+                    nums[i] = 0;
                 }
                 nonZeroIndex++;
             }
@@ -77,12 +79,12 @@ public class SimpleAlgorithm {
            第七次while 判断时， PA, PB 都是null, 说明没有相交的部分，返回null*//*
 
 
-          */
+     */
 /* PA = (PA.next == null) ? headB : PA.next;
            PB = (PB.next == null) ? headA : PB.next;*//*
 
 
-         */
+     */
 /*下面的代码不对，如果PA 或者PB 到了最后一个节点就接着指向两一个节点的头部
           PA = (PA.next == null) ? PB : PA.next;
            PB = (PB.next == null) ? PA : PB.next;*//*
@@ -112,7 +114,59 @@ public class SimpleAlgorithm {
     }
 */
 
+    public static ListNode getReversedListNode(ListNode head) {
+        ListNode pre = null;
+        ListNode cur = head;
+        while (cur != null) {
+            ListNode nextTmp = cur.next;
+            cur.next = pre;
+            pre = cur;
+            cur = nextTmp;
+        }
+        return pre;
+    }
 
+    public static ListNode reverseListNodeWithStack(ListNode head){
+        if(head == null || head.next ==null){
+            return head;
+        }
+
+        ArrayDeque<ListNode> dequeStack = new ArrayDeque<>();
+//        Stack<ListNode> stack = new Stack<>();
+        ListNode cur = head;
+        while(cur != null){
+            dequeStack.push(cur);
+            cur = cur.next;;
+        }
+        System.out.println("done for pushing to stack");
+        ListNode headNode = dequeStack.pop();
+        ListNode tmp = headNode;
+        while(!dequeStack.isEmpty()){
+            tmp.next = dequeStack.pop();
+            tmp = tmp.next;
+        }
+        tmp.next = null;
+        return headNode;
+
+      /*  ListNode newOne = new ListNode(0);
+        head = newOne;
+        while(!dequeStack.isEmpty()){
+
+            newOne.next = dequeStack.pop();
+            newOne = newOne.next;
+
+        }
+        return head.next;*/
+
+      /*  while(!dequeStack.isEmpty()){
+
+            head.next = dequeStack.pop();
+            head = head.next;
+
+        }
+        return newOne.next;*/
+
+    }
 
 
     public static void main(String[] args) {
@@ -162,26 +216,74 @@ public class SimpleAlgorithm {
         ListNode intersectionNode = getIntersectionNode(headA, headB);*/
 
         ListNode node = new ListNode(1);
-        node.next=new ListNode(2);
-        node.next.next=new ListNode(3);
-        node.next.next.next=new ListNode(4);
-        node.next.next.next.next=new ListNode(5);
+        node.next = new ListNode(1);
+        node.next.next = new ListNode(1);
+        node.next.next.next = new ListNode(1);
+        node.next.next.next.next = new ListNode(1);
+//        node.next.next.next.next.next = new ListNode(1);
 //链表反转- 明天用迭代法和递归法
-        ListNode listNode = reverseNode(node);
+//        ListNode listNode = reverseNode(node);
+//        ListNode listNode = reverseNodeWithIterator(node);
+//        ListNode listNode1 = getReversedListNode(node);
+
+//        ListNode listNode = reverseListNodeWithStack(node);
+//        ListNode listNode = selfImpReversedList(node);
+        boolean palindrome = isPalindrome(node);
 
 
         System.out.println("done");
     }
-    public static ListNode  reverseNode(ListNode node){
-        ListNode cur = node;
-        ListNode newNode = new ListNode(cur.val);
-        while( cur.next != null){
-            ListNode listNode = new ListNode(cur.next.val);
-            listNode.next = newNode;
-            newNode = listNode;
-            cur = cur.next;
+
+    public static boolean isPalindrome(ListNode head){
+        if(head == null || head.next == null){
+            return true;
         }
-        return newNode;
+
+        ListNode fast = head;
+        ListNode slow = head;
+        while(fast != null && fast.next != null){
+            fast = fast.next.next;
+            slow = slow.next;
+        }
+        ListNode reversedRightHalf = selfImpReversedList(slow);
+        ListNode p1 = head;
+        ListNode p2 = reversedRightHalf;
+        while(p2 != null){
+            if(p1.val != p2.val){
+                return false;
+            }
+            p1 = p1.next;
+            p2 = p2.next;
+        }
+        return true;
+    }
+
+    public static ListNode selfImpReversedList(ListNode head){
+        if(head == null || head.next == null){
+            return head;
+        }
+        ListNode cur = head;
+        ListNode pre = null;
+        while(cur != null){
+            ListNode next = cur.next;
+            cur.next = pre;
+            pre = cur;
+            cur = next;
+        }
+        return pre;
+    }
+
+
+    public static ListNode reverseNodeWithIterator(ListNode head) {
+        ListNode prev = null;
+        ListNode current = head;
+        while (current != null) {
+            ListNode nextTemp = current.next;
+            current.next = prev;
+            prev = current;
+            current = nextTemp;
+        }
+        return prev;
     }
 }
 

@@ -4,6 +4,7 @@ package com.selfimp.accountbook;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -28,24 +29,28 @@ public class FileHandler {
         try(BufferedReader reader = Files.newBufferedReader((Paths.get(DATA_FILE)))){
             String line;
             while((line = reader.readLine()) != null){
-                if(!line.startsWith("#")){
-                    String[] splits = line.split("\\|");
-                    if(splits.length ==6){
-                        Record record =
-                                new Record(Integer.parseInt(splits[0]), LocalDate.parse(splits[1]),splits[2],splits[3],Double.parseDouble(splits[4]),splits[5]);
-                        records.add(record);
-                    }else{
-                        System.out.println("some items has no data, please check it!");
-                        throw new RuntimeException();
-                    }
+                if(!line.isEmpty()) {
 
+                    if (!line.startsWith("#")) {
+                        String[] splits = line.split("\\|");
+                        if (splits.length == 6) {
+                            Record record =
+                                    new Record(Integer.parseInt(splits[0]), LocalDate.parse(splits[1]), splits[2], splits[3], Double.parseDouble(splits[4]), splits[5]);
+                            records.add(record);
+                        } else {
+                            System.out.println("some items has no data, please check it!");
+                            throw new RuntimeException();
+                        }
+
+                    }
                 }
             }
 //            accountBook.setNextId(maxId+1);
         } catch (NoSuchFileException e){
             System.out.println("!file not found" + e.getFile());
         } catch (IOException e) {
-            throw new RuntimeException(e);
+//            throw new RuntimeException(e);
+            System.out.println("Error occured!!");
         }
         return records;
     }
@@ -69,4 +74,33 @@ public class FileHandler {
         System.out.println("saved all data!");
     }
 
+    void backupData(){
+         try(BufferedReader reader = Files.newBufferedReader(Paths.get(DATA_FILE));
+         BufferedWriter writer = Files.newBufferedWriter(Paths.get(DATA_FILE_BAK))) {
+             String line;
+             while((line = reader.readLine()) != null){
+                 writer.write(line);
+                 writer.newLine();
+             }
+         } catch (IOException e) {
+             throw new RuntimeException(e);
+         }
+    }
+
+    boolean recoverDataFromBackupFile() {
+        try (BufferedReader reader = Files.newBufferedReader(Paths.get(DATA_FILE_BAK));
+             BufferedWriter writer = Files.newBufferedWriter(Paths.get(DATA_FILE))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                writer.write(line);
+                writer.newLine();
+            }
+        } catch (NoSuchFileException e) {
+            System.err.printf("文件不存在： " + e.getFile());
+            return false;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return true;
+    }
 }

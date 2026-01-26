@@ -2,6 +2,7 @@ package com.selfimp.accountbook;
 
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -26,6 +27,7 @@ public class AccountBook {
         }*/
         record.setId(nextId++);
         records.add(record);
+        records.sort(Comparator.comparing(Record :: getDate).reversed());
     }
 
 
