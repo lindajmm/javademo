@@ -1,10 +1,7 @@
 package com.leetcode.practice.simple;
 
 
-import java.util.ArrayDeque;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Stack;
+import java.util.*;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 /**
@@ -169,7 +166,7 @@ public class SimpleAlgorithm {
     }
 
 
-    public static void main(String[] args) {
+//    public static void main(String[] args) {
 /*//        int[] nums = {0,-8, 11,15,2,3,7};
         int[] nums = {2, 5, 5, 11};
 //        int[] nums = {3,2,4};
@@ -215,11 +212,11 @@ public class SimpleAlgorithm {
 
         ListNode intersectionNode = getIntersectionNode(headA, headB);*/
 
-        ListNode node = new ListNode(1);
+       /* ListNode node = new ListNode(1);
         node.next = new ListNode(1);
         node.next.next = new ListNode(1);
         node.next.next.next = new ListNode(1);
-        node.next.next.next.next = new ListNode(1);
+        node.next.next.next.next = new ListNode(1);*/
 //        node.next.next.next.next.next = new ListNode(1);
 //链表反转- 明天用迭代法和递归法
 //        ListNode listNode = reverseNode(node);
@@ -228,8 +225,39 @@ public class SimpleAlgorithm {
 
 //        ListNode listNode = reverseListNodeWithStack(node);
 //        ListNode listNode = selfImpReversedList(node);
-        boolean palindrome = isPalindrome(node);
+//        boolean palindrome = isPalindrome(node);
+    public static void main(String[] args) {
+        /*ListNode node = new ListNode(1);
+        ListNode listNode2 = new ListNode(2);
+        node.next = listNode2;
+        node.next.next = new ListNode(4);
+        node.next.next.next = new ListNode(5);
+        node.next.next.next.next = listNode2;*/
 
+       /* ListNode node1 = new ListNode(1);
+        node1.next = new ListNode(5);
+        node1.next.next = new ListNode(10);
+        node1.next.next.next = new ListNode(20);
+        node1.next.next.next.next = new ListNode(21);
+
+        ListNode node2 = new ListNode(6);
+        node2.next = new ListNode(8);
+        node2.next.next = new ListNode(11);
+        node2.next.next.next = new ListNode(20);*/
+
+//        boolean b = hasCycle(node);
+//        ListNode result = mergeTwoLists(node1, node2);
+        TreeNode root = new TreeNode(10);
+        root.left=new TreeNode(3);
+        root.left.left = new TreeNode( 2);
+        root.left.right = new TreeNode(4);
+
+        root.right = new TreeNode(15);
+        root.right.left = new TreeNode(12);
+        root.right.right = new TreeNode(20);
+
+//        List<Integer> integers0 = inorderTraversal(root);
+        List<Integer> integers1 = inorderTraversalIterator(root);
 
         System.out.println("done");
     }
@@ -272,7 +300,125 @@ public class SimpleAlgorithm {
         }
         return pre;
     }
+//是否有环
+    public static boolean hasCycle(ListNode head) {
+        if(head == null || head.next == null){
+            return false;
+        }
+        ListNode slow = head;
+        ListNode fast = head;
+        while(fast != null && fast.next != null){
+            slow = slow.next;
+            fast = fast.next.next;
+            if(slow == fast){
+                return true;
+            }
+        }
+        return false;
+    }
 
+    public static ListNode detectCycle(ListNode head) {
+        if(head == null || head.next == null){
+            return null;
+        }
+        ListNode slow = head;
+        ListNode fast = head;
+        while(fast != null && fast.next != null){
+            slow = slow.next;
+            fast = fast.next.next;
+            if(slow == fast){
+                fast = head;
+//                while(slow != null){//两个问题：1.当fast=head 后，slow 和 fast 还没有开始移动，可能已经相等；2.这里可能导致死循环
+                  while(fast != slow){
+                    slow = slow.next;
+                    fast = fast.next;
+                }
+                return slow;//因为有环，一定会相应，且再次相遇的点就是环的入口
+            }
+        }
+        return null;
+    }
+
+    public static ListNode mergeTwoLists(ListNode list1, ListNode list2) {
+       /* if(list1 == null && list2 == null){
+            return null;
+        }
+        if(list1 != null && list2 == null){
+            return list1;
+        }
+        if(list1 == null && list2 != null){
+            return list2;
+        }*/
+        if(list1 == null) return list2;
+        if(list2 == null) return list1;
+
+        ListNode result = new ListNode(0);
+        ListNode head = result;
+
+        while(list1 != null && list2 != null){
+            if(list1.val < list2.val){
+               /* result.next = new ListNode(list1.val);
+                result = result.next;*/
+                //上面是我自己的实现，缺点如下：创建了不必要的对象，浪费空间。但是整体思想是一样的
+                result.next = list1;
+                list1 = list1.next;
+            }else{
+            /*    result.next = new ListNode(list2.val);
+                result = result.next;*/
+                result.next = list2;
+
+                list2 = list2.next;
+            }
+            result = result.next;
+        }
+
+        result.next = (list1 == null) ? list2: list1;
+
+        return head.next;
+    }
+    //递归法
+    public static List<Integer> inorderTraversal(TreeNode root) {
+        ArrayList<Integer> result = new ArrayList<>();
+        subInorder(root, result);
+        return result;
+    }
+
+    private static void subInorder(TreeNode node, List<Integer> result) {
+        if (node == null) {
+            return;
+        }
+        //遍历左子树
+        subInorder(node.left, result);
+        //添加根节点
+        result.add(node.val);
+        //遍历右子树
+        subInorder(node.right, result);
+    }
+
+    //迭代法
+    public static List<Integer> inorderTraversalIterator(TreeNode root) {
+        List<Integer> result = new ArrayList<>();
+        Deque<TreeNode> queue = new ArrayDeque<>();
+//        Stack<TreeNode> stack = new Stack<>();
+        TreeNode curr = root;
+
+        while (curr != null || !queue.isEmpty()) {
+            // 一直向左走，将所有左节点入栈
+            while (curr != null) {
+                queue.push(curr);
+                curr = curr.left;
+            }
+
+            // 弹出栈顶节点并访问
+            curr = queue.pop();
+            result.add(curr.val);
+
+            // 转向右子树
+            curr = curr.right;
+        }
+
+        return result;
+    }
 
     public static ListNode reverseNodeWithIterator(ListNode head) {
         ListNode prev = null;
