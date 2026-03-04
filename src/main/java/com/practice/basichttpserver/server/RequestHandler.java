@@ -1,12 +1,13 @@
-package com.practice.simpehttpserver.server;
+package com.practice.basichttpserver.server;
 
 import java.io.*;
-        import java.net.Socket;
+import java.net.Socket;
 import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 
 /**
@@ -211,7 +212,14 @@ public class RequestHandler implements Runnable {
         writer.printf("HTTP/1.1 %d %s\r\n", statusCode, STATUS_MESSAGES.get(statusCode));
 
         // 发送响应头
-        writer.printf("Content-Type: %s\r\n", contentType);
+//        writer.printf("Content-Type: %s\r\n", contentType);
+        if (contentType.startsWith("text/")) {
+            // 对于文本类型，指定UTF-8编码
+            writer.printf("Content-Type: %s; charset=UTF-8\r\n", contentType);
+        } else {
+            writer.printf("Content-Type: %s\r\n", contentType);
+        }
+
         writer.printf("Content-Length: %d\r\n", content.length);
         writer.printf("Connection: close\r\n");
         writer.printf("\r\n");

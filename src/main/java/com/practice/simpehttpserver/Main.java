@@ -1,14 +1,38 @@
 package com.practice.simpehttpserver;
 
 
+import java.nio.charset.StandardCharsets;
+
 /**
  * @author: Linda
  * @date: 2026/1/29 16:30
  * @description:
  */
 public class Main {
-
     public static void main(String[] args) {
+        // 测试示例
+        String jsonString = "{\n" +
+                "  \"username\": \"zhangsan\",\n" +
+                "  \"email\": \"zhangsan@example.com\",\n" +
+                "  \"password\": \"SecurePass123!\",\n" +
+                "  \"phone\": \"13800138000\"\n" +
+                "}";
+
+        System.out.println("=== JSON长度计算 ===");
+        System.out.println("JSON字符串:\n" + jsonString);
+        System.out.println("\n字符数: " + jsonString.length());
+        byte[] utf8Bytes = jsonString.getBytes(StandardCharsets.UTF_8);
+        int byteCount = utf8Bytes.length;
+        System.out.println("字节数（UTF-8）: " + byteCount);
+
+//        // 不同编码的长度
+//        System.out.println("\n不同编码的字节长度:");
+//        System.out.println("UTF-8: " + calculateContentLength(jsonString, StandardCharsets.UTF_8));
+//        System.out.println("UTF-16: " + calculateContentLength(jsonString, StandardCharsets.UTF_16));
+//        System.out.println("ISO-8859-1: " + calculateContentLength(jsonString, StandardCharsets.ISO_8859_1));
+    }
+
+    public /*static*/ void main11(String[] args) {
         int port = 8080;
         String rootDir = "webroot";
         int maxThreads = 10;

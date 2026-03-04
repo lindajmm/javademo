@@ -73,7 +73,10 @@ public class SimpleHTTPServer {
             //主循环，接受客户端连接
             while(isRunning){
                 Socket clientSocket = serverSocket.accept();
-//                threadPool.execute(new ClientHandler(clientSocket));
+                // 设置读超时
+                clientSocket.setSoTimeout(30000);
+
+                threadPool.execute(new ClientHandler(clientSocket));
             }
         } catch (IOException e) {
             System.err.println("服务器启动失败： "+ e.getMessage());
@@ -148,6 +151,7 @@ public class SimpleHTTPServer {
                 try(FileWriter writer = new FileWriter(targetFile)){
                     writer.write(getDefaultStyleCss());
                 }
+                break;
             default:
                 System.out.println("filename is not supported!");
         }
@@ -189,5 +193,56 @@ public class SimpleHTTPServer {
                       line-height: 1.6;
                     }
                 """;
+    }
+
+    public static void main(String[] args) {
+        int port = 8080;
+        String rootDir = "webrootlinda";
+        int maxThreads =10;
+
+        //解析命令行参数
+        for(int i=0; i< args.length; i++){
+            switch(args[i]){
+                case "-p":
+                case "--port":
+                    if(i+1 < args.length){
+                        port = Integer.parseInt(args[++i]);
+                    }
+                    break;
+                case "-d":
+                case "--dir":
+                    if(i+1 < args.length){
+                        rootDir = args[++i];
+                    }
+                    break;
+                case "-t":
+                case "--threads":
+                    if(i+1 < args.length){
+                        maxThreads = Integer.parseInt(args[++i]);
+                    }
+                    break;
+                case "-h":
+                case "--help":
+                    System.out.println("用法: java SimpleHttpServer [选项]");
+                    System.out.println("选项:");
+                    System.out.println("  -p, --port <端口>     服务器端口 (默认: 8080)");
+                    System.out.println("  -d, --dir <目录>      静态文件根目录 (默认: webrootlinda)");
+                    System.out.println("  -t, --threads <数量>  最大线程数 (默认: 10)");
+                    System.out.println("  -h, --help           显示此帮助信息");
+                    return;
+            }
+        }
+
+        //创建并启动服务器
+        SimpleHTTPServer server = new SimpleHTTPServer(port, rootDir, maxThreads);
+
+        //添加关闭钩子
+        Runtime.getRuntime().addShutdownHook(new Thread( () -> {
+            System.out.println("\n正在关闭服务器...");
+            server.stop();
+        }));
+
+        //启动服务器
+        server.start();
     }
 }

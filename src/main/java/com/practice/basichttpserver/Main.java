@@ -1,6 +1,8 @@
-package com.practice.simpehttpserver;
-import server.SimpleHttpServer;
-import client.HttpClient;
+package com.practice.basichttpserver;
+
+
+import com.practice.basichttpserver.client.HttpClient;
+import com.practice.basichttpserver.server.SimpleHttpServer;
 
 /**
  * @author: Linda
@@ -8,10 +10,7 @@ import client.HttpClient;
  * @description:
  */
 
-
-
-
-public class Main2 {
+public class Main {
     public static void main(String[] args) {
         if (args.length < 1) {
             printUsage();
