@@ -172,7 +172,7 @@ public class PersonalAccountBook {
                     //search by category
                     System.out.print("please input category name: ");
                     String category=scanner.nextLine();
-                    accountBook.getAllRecords().stream().
+                    results = accountBook.getAllRecords().stream().
                             filter(r -> r.getCategory().contains(category))
                             .collect(Collectors.toList());
                 }
